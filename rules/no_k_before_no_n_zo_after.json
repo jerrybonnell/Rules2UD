@@ -1,0 +1,8 @@
+{
+    "name": "no_k_before_no_n_zo_after",
+    "rules": {
+        "焉": "焉んぞ"
+    },
+    "condition": "y > 0 and z < len(x) - 1 and get_word_cat(x[y - 1]) != 'KANJI' and x[z + 1] not in ['ん', 'ぞ'] and not (z < len(x) - 3 and 'くんぞ' in x[z + 1:z + 4])",
+    "notes": "no kanji character before and no ん, ぞ following or くんぞ"
+}

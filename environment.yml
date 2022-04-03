@@ -1,0 +1,10 @@
+name: blueberry
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.9.1
+  - pip
+  - nb_conda_kernels
+  - pip:
+        - -r requirements.txt

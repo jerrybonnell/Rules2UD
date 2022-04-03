@@ -1,0 +1,12 @@
+{
+    "name": "kana_priority_rules",
+    "rules": {
+        "照さ": "照らさ",
+        "照し": "照らし",
+        "照す": "照らす",
+        "照せ": "照らせ",
+        "照そ": "照らそ"
+    },
+    "condition": "y > 0 and get_word_cat(x[y - 1]) == 'HIRAGANA'",
+    "notes": "hiragana + c + {さしすせそ}; NOTE this is implemented as a workaround by listing all combinations; ex: hiragana + 照 + {さしすせそ} > insert ら immediately after 照"
+}

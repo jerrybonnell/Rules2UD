@@ -1,0 +1,9 @@
+{
+    "name": "end_of_sent_rules",
+    "rules": {
+        "まさ": "ますさ",
+        "でさ": "ですさ"
+    },
+    "condition": "z == len(x) - 1 or x[z + 1] in ['。', '、']",
+    "notes": "rules that respond at the end of a sentence"
+}

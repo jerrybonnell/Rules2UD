@@ -1,0 +1,9 @@
+# text = 政黨政治は寧ろ廢するがよい
+1	政黨	政党	NOUN	名詞-普通名詞-一般	_	2	_	_	compounSpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=CONT|NP_B|Reading=セイトウ
+2	政治	政治	NOUN	名詞-普通名詞-一般	_	7	dislocated	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SEM_HEAD|NP_I|Reading=セイジ
+3	は	は	ADP	助詞-係助詞	_	2	case	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Reading=ハ
+4	寧ろ	寧ろ	ADV	副詞	_	7	advmod	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=SEM_HEAD|Reading=ムシロ
+5	廢する	廃する	VERB	動詞-一般	_	7	nsubj	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=SEM_HEAD|Inf=サ行変格,終止形-一般|Reading=ハイスル
+6	が	が	ADP	助詞-格助詞	_	5	case	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Reading=ガ
+7	よい	良い	ADJ	形容詞-非自立可能	_	0	root	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=ROOT|Inf=形容詞,終止形-一般|Reading=ヨイ
+

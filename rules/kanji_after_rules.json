@@ -1,0 +1,8 @@
+{
+    "name": "kanj_after_rules",
+    "rules": {
+        "亦た": "また"
+    },
+    "condition": "z < len(x) - 1 and (get_word_cat(x[z + 1]) == 'KANJI' or x[z + 1] == '。' or x[z + 1] == '、')",
+    "notes": "rules where the following character is a kanji"
+}

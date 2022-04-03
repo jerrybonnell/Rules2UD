@@ -1,0 +1,23 @@
+# text = 社會の發達に從ふて、
+1	社會	社会	NOUN	名詞-普通名詞-一般	_	3	nmod	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=SEM_HEAD|NP_B|Reading=シャカイ
+2	の	の	ADP	助詞-格助詞	_	1	case	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Reading=ノ
+3	發達	発達	NOUN	名詞-普通名詞-サ変可能	_	5	obl	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=SEM_HEAD|NP_B|Reading=ハッタツ
+4	に	に	ADP	助詞-格助詞	_	3	case	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Reading=ニ
+5	從ふ	従う	VERB	動詞-一般	_	0	root	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=ROOT|Inf=五段-ワア行,連用形-ウ音便|Reading=シタゴウ
+6	て	て	SCONJ	助詞-接続助詞	_	5	mark	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Reading=テ
+7	、	、	PUNCT	補助記号-読点	_	5	punct	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=CONT|Reading=、
+
+# text = 国境の長いトンネルを抜けると雪国であった。
+1	国境	国境	NOUN	名詞-普通名詞-一般	_	4	nmod	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=SEM_HEAD|NP_B|Reading=コッキョウ
+2	の	の	ADP	助詞-格助詞	_	1	case	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Reading=ノ
+3	長い	長い	ADJ	形容詞-一般	_	4	acl	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=SEM_HEAD|Inf=形容詞,連体形-一般|Reading=ナガイ
+4	トンネル	トンネル	NOUN	名詞-普通名詞-サ変可能	_	6	obj	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=SEM_HEAD|NP_B|Reading=トンネル
+5	を	を	ADP	助詞-格助詞	_	4	case	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Reading=ヲ
+6	抜ける	抜ける	VERB	動詞-非自立可能	_	8	acl	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=SEM_HEAD|Inf=下一段-カ行,終止形-一般|Reading=ヌケル
+7	と	と	SCONJ	助詞-接続助詞	_	6	mark	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Reading=ト
+8	雪国	雪国	NOUN	名詞-普通名詞-一般	_	0	root	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=ROOT|NP_B|Reading=ユキグニ
+9	で	だ	AUX	助動詞	_	8	cop	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Inf=助動詞-ダ,連用形-一般|Reading=デ
+10	あっ	ある	AUX	動詞-非自立可能	_	8	aux	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Inf=五段-ラ行,連用形-促音便|Reading=アッ
+11	た	た	AUX	助動詞	_	8	aux	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Inf=助動詞-タ,終止形-一般|Reading=タ
+12	。	。	PUNCT	補助記号-句点	_	8	punct	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=CONT|Reading=。
+

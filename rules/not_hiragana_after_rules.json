@@ -1,0 +1,12 @@
+{
+    "name": "not_hiragana_after_rules",
+    "rules": {
+        "假令い": "たとえ",
+        "たとい": "たとえ",
+        "たとひ": "たとえ",
+        "仮令ひ": "たとえ",
+        "仮令い": "たとえ"
+    },
+    "condition": "z == len(x) - 1 or (get_word_cat(x[z + 1]) != 'HIRAGANA')",
+    "notes": "rules where the original sequence is not followed by a hiragana"
+}

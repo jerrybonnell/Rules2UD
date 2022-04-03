@@ -1,0 +1,9 @@
+{
+    "name": "kana_special_rules",
+    "rules": {
+        "がよい": "が良い",
+        "連て": "連れて"
+    },
+    "condition": "y > 0 and get_word_cat(x[y - 1]) == 'HIRAGANA'",
+    "notes": "If it immediately follows some hiragana"
+}

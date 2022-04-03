@@ -1,0 +1,9 @@
+{
+    "name": "no_kanji_before_rules",
+    "rules": {
+        "大なる": "大いなる",
+        "那の": "かの"
+    },
+    "condition": "y > 0 and get_word_cat(x[y - 1]) != 'KANJI'",
+    "notes": "the character before the sequence is not a kanji"
+}

@@ -1,0 +1,8 @@
+{
+    "name": "before_after_hira_kanji_rules",
+    "rules": {
+        "へ": "え"
+    },
+    "condition": "(y > 0 and get_word_cat(x[y - 1]) == 'KANJI') and (z < len(x) - 1 and get_word_cat(x[z + 1]) == 'HIRAGANA')",
+    "notes": "if a kanji appears before this sequence and sequence is followed by hiragana; ex: kanji + へ + hiragana"
+}

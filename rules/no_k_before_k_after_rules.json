@@ -1,0 +1,8 @@
+{
+    "name": "no_k_before_k_after_rules",
+    "rules": {
+     "頗": "頗る"
+    },
+    "condition": "y > 0 and z < len(x) - 1 and get_word_cat(x[y - 1]) != 'KANJI' and get_word_cat(x[z + 1]) == 'KANJI'",
+    "notes": "NO KANJI + sequence + KANJI : NO KANJI + sequence + KANJI"
+}

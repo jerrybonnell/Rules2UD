@@ -1,0 +1,9 @@
+# text = 社會の發達に從ふて、
+1	社會	社会	NOUN	名詞-普通名詞-一般	_	3	nmod	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=SEM_HEAD|NP_B|Reading=シャカイ
+2	の	の	ADP	助詞-格助詞	_	1	case	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Reading=ノ
+3	發達	発達	NOUN	名詞-普通名詞-サ変可能	_	5	obl	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=SEM_HEAD|NP_B|Reading=ハッタツ
+4	に	に	ADP	助詞-格助詞	_	3	case	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Reading=ニ
+5	從ふ	従う	VERB	動詞-一般	_	0	root	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=ROOT|Inf=五段-ワア行,連用形-ウ音便|Reading=シタゴウ
+6	て	て	SCONJ	助詞-接続助詞	_	5	mark	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Reading=テ
+7	、	、	PUNCT	補助記号-読点	_	5	punct	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=CONT|Reading=、
+

@@ -1,0 +1,11 @@
+# text = 政黨政治は寧ろ廢するがよい
+1	政	政	NOUN	名詞-普通名詞-一般	_	3	_	_	compounSpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=CONT|NP_B|Reading=セイ
+2	黨	黨	NOUN	接尾辞-名詞的-一般	_	3	_	_	compounSpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=CONT|NP_I|Reading=トウ
+3	政治	政治	NOUN	名詞-普通名詞-一般	_	9	dislocated	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SEM_HEAD|NP_I|Reading=セイジ
+4	は	は	ADP	助詞-係助詞	_	3	case	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Reading=ハ
+5	寧ろ	寧ろ	ADV	副詞	_	6	advmod	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=SEM_HEAD|Reading=ムシロ
+6	廢	廢	VERB	名詞-普通名詞-サ変可能	_	9	advcl	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=SEM_HEAD|Reading=廢
+7	する	する	AUX	動詞-非自立可能	_	6	advcl	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Inf=サ行変格,終止形-一般|Reading=スル
+8	が	が	ADP	助詞-格助詞	_	6	mark	_	SpaceAfter=No|BunsetuBILabel=I|BunsetuPositionType=SYN_HEAD|Reading=ガ
+9	よい	良い	ADJ	形容詞-非自立可能	_	0	root	_	SpaceAfter=No|BunsetuBILabel=B|BunsetuPositionType=ROOT|Inf=形容詞,終止形-一般|Reading=ヨイ
+
