@@ -1132,8 +1132,7 @@ if __name__ == "__main__":
 
     if model == "esupar":
         os.environ['CUDA_VISIBLE_DEVICES'] = ""
-        esupar_model = esupar.load(
-            "jerrybonnell/adaptabert-japanese-yasuoka-char-cvg-25-upos")
+        esupar_model = esupar.load("ja")
 
     console.print((fname, ftype, app_rules, model, dir_name, verbose))
     if ftype == "txt":
