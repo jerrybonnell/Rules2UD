@@ -8,7 +8,7 @@ jobs:
     # see https://github.com/actions/checkout/issues/760
     - name: adding github workspace as safe directory
       run: |
-        git config --global --add safe.directory $GITHUB_WORKSPACE
+        git config --global --add safe.directory /github/workspace
 
     - name: Checkout Code
       uses: actions/checkout@v2
@@ -16,7 +16,7 @@ jobs:
         ref: ${{ github.event.pull_request.head.sha }}
 
     - name: update jupyter dependencies with repo2docker
-      uses: jupyterhub/repo2docker-action@master
+      uses: jerrybonnell/repo2docker-action@master
       with:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
