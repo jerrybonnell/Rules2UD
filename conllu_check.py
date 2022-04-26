@@ -1,12 +1,10 @@
 
 def test_sent_not_corrupted(sent, out):
     # cross-check itself to make sure column[1] == sent
-    check_sent = "".join([out[i][1] for i in range(1, len(out) - 2)])
-    # print(f"answer : [{sent}]")
-    # print(f"ours   : [{check_sent}]")
+    check_sent = "".join([out[i][1] for i in range(1, len(out) - 1)])
     if check_sent != sent:
         return False
-    are_blank = [len(out[i][1]) == 0 for i in range(1, len(out) - 2)]
+    are_blank = [len(out[i][1]) == 0 for i in range(1, len(out) - 1)]
     if sum(are_blank) != 0:
         return False
     return True

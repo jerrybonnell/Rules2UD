@@ -16,6 +16,8 @@ import itertools
 import subprocess
 import io
 
+
+
 sys.path.append('../')
 from evaluation_script import conll18_ud_eval
 
@@ -41,7 +43,7 @@ cat_info_list = []
 cat_info_map = {}
 
 rule_sets = []
-for rule_json in glob.glob("rules/*.json"):
+for rule_json in glob.glob(f"{FILE_DIR}/rules/*.json"):
     with open(rule_json, "r", encoding='utf-8') as f:
         rules = json.load(f)
     rule_sets.append(rules)
@@ -94,7 +96,7 @@ for i in range(len(rule_sets)):
 
 
 def load_dictionary():
-    with open(f'char.def', 'r') as f:
+    with open(f'{FILE_DIR}/char.def', 'r') as f:
         cat_info_list = f.read().split('\n')
     cat_info_list = [l.split(' ') for l in cat_info_list][:-1]
     # convert the unicode representation to just an integer
@@ -330,7 +332,7 @@ def handle_replace(sent, new_sent, rules, log, func, model):
                         vprint(f"match word : {match_word}")
                     else:
                         raise ValueError("start is at 0")
-                    ginza_out = call_model(new_sent, model)[1:]
+                    ginza_out = call_model([new_sent], model)[0][1:]
                     # vprint(ginza_out)
                     morphemes = [m[1] for m in ginza_out if type(m) is list]
                     vprint(f"morphemes {morphemes}")
@@ -564,7 +566,7 @@ def handle_overlap(sent, pos_tuples, pos_counter, model):
                 replaced_word + sent_applied[tup[1]+1:]
 
         # use these two things to run ginza
-        sent_applied_out = call_model(sent_applied, model)
+        sent_applied_out = call_model([sent_applied], model)[0]
         # calculate score
         num_rows = len(sent_applied_out[1:-2])
         num_bad_readings = 0
@@ -588,7 +590,7 @@ def handle_overlap(sent, pos_tuples, pos_counter, model):
         sent_applied_out = "\n".join(sent_applied_out)
 
 
-        out_orig = call_model(sent, model)
+        out_orig = call_model([sent], model)[0]
         for i in range(len(out_orig)):
             if type(out_orig[i]) == list:
                 out_orig[i] = "\t".join(out_orig[i])
@@ -683,10 +685,10 @@ def ginza_replace(sent, model):
         new_sent, overlap_flag, \
             replace_log = res
         if overlap_flag:
-            vprint("has overlap 🏖 ")
-            vprint(f"sent is {sent}")
+            console.print("has overlap 🏖 ", style="bold red")
+            console.print(f"sent is {sent}", style="bold red")
         else:
-            vprint("overlap resolved ⛱")
+            console.print("overlap resolved ⛱", style="bold green")
     else:
         vprint("no overlap detected 🏝")
 
@@ -732,8 +734,8 @@ def sub_ginza_out(out, old_s, log, model):
             diff = len(all_rules[orig_word]) - len(orig_word)
         vprint(f"diff {diff}")
         counter = 0 # says where we are in the string
-        # go through the ginza output list (-2 b/c the last 2 are empty list)
-        for i in range(1, len(out) - 2):
+        # go through the ginza output list (-1 b/c the last 1 are empty list)
+        for i in range(1, len(out) - 1):
             counter += len(out[i][1]) # the counter steps by blocks
             vprint(f"counter {counter}")
             # this condition tells us if there is a substitution that needs to be
@@ -871,11 +873,11 @@ def sub_ginza_out(out, old_s, log, model):
                         new_str = orig_word
                     elif len(new_str) == 0:
                         # this condition is why we have a blank node
+                        global fname
                         assert len(out[i][1]) - \
-                            (start - begin_unit_index) - diff == 0
+                            (start - begin_unit_index) - diff == 0, f"{fname}"
                         lemma_len = len(out[i][2])
-
-                        assert lemma_len == 1
+                        assert lemma_len == 1, f"{fname}"
                         vprint(f"taking {lemma_len} chars from org w {orig_word}")
                         new_str = orig_word[0:lemma_len]
                         out[i][1] = new_str  # do the substitution
@@ -889,61 +891,116 @@ def sub_ginza_out(out, old_s, log, model):
 
                     out[i][1] = new_str  # do the substitution
 
-def call_ginza(sent):
+def call_ginza(sent_list):
     """
     returns None if sentence does not conform to udpipe annotation standards
     """
-    out = os.popen(f'echo "{sent}" | ginza -d').read()
-    vprint(out)
+    pos_to_sent = {k:v for k,v in zip(range(len(sent_list)),sent_list)}
+    sent_s = "\n".join([s for s in sent_list if s is not None])
+    outs_s = os.popen(f'echo "{sent_s}" | ginza -d').read()
+    vprint(outs_s)
 
-    out = out.split("\n")
-    for i in range(len(out)):
-        if "\t" in out[i]:
-            out[i] = out[i].split("\t")
-    # first some preprocessing: reject any sentences that have lemmas or
-    # tokens that are too long; also replace "." with "_"
-    def utf8len(s):
-        return len(s.encode('utf-8'))
+    outs = []
+    for out in outs_s.split("\n\n"):
+        out = out.split("\n")
+        for i in range(len(out)):
+            if "\t" in out[i]:
+                out[i] = out[i].split("\t")
+        # first some preprocessing: reject any sentences that have lemmas or
+        # tokens that are too long; also replace "." with "_"
+        def utf8len(s):
+            return len(s.encode('utf-8'))
 
-    for i in range(1, len(out)):
-        if len(out[i]) == 0:
+        none_flag = False
+        for i in range(1, len(out)):
+            if len(out[i]) == 0:
+                continue
+            if out[i][1] == ".":
+                out[i][1] == "_"
+            if utf8len(out[i][1]) > 200 or utf8len(out[i][2]) > 200:
+                outs.append(None)
+                none_flag = True
+                break
+        if none_flag:
             continue
-        if out[i][1] == ".":
-            out[i][1] == "_"
-        if utf8len(out[i][1]) > 200 or utf8len(out[i][2]) > 200:
-            return None
+        out = out + ['\n'] * 1
+        outs.append(out)
 
-    return out
+    outs_aligned = [] # need to align with possible none's
+    for i in range(len(pos_to_sent)):
+        if pos_to_sent[i] is not None:
+            # treat outs as a stack and pop from the front
+            outs_aligned.append(outs.pop(0))
+        elif pos_to_sent[i] is None:
+            outs_aligned.append(None)
+        else:
+            raise ValueError("should not be reached")
 
-def call_esupar(sent):
-    out = str(esupar_model(sent))
-    vprint(out)
+    assert len(outs) == 1
+    assert len(outs_aligned) == len(sent_list)
+    # one remaining newline char at end
+    outs_aligned.append(outs.pop(0))
 
-    out = out.split("\n")
-    out.append("")
-    for i in range(len(out)):
-        if "\t" in out[i]:
-            out[i] = out[i].split("\t")
+    return outs_aligned
 
-    out.insert(0, f"# text = {sent}")
-    # first some preprocessing: reject any sentences that have lemmas or
-    # tokens that are too long; also replace "." with "_"
-    def utf8len(s):
-        return len(s.encode('utf-8'))
+def call_esupar(sent_list):
 
-    for i in range(1, len(out)):
-        if len(out[i]) == 0:
+    outs = []
+    for sent in sent_list:
+        if sent is None:
+            outs.append(None)
             continue
-        if out[i][1] == ".":
-            out[i][1] == "_"
-        if utf8len(out[i][1]) > 200 or utf8len(out[i][2]) > 200:
-            return None
+        out = str(esupar_model(sent))
+        vprint(out)
+        out = out.split("\n")
+        out.append("")
+        for i in range(len(out)):
+            if "\t" in out[i]:
+                out[i] = out[i].split("\t")
+        out.insert(0, f"# text = {sent}")
+        if out[-1] == '':
+            del out[-1]
+        # first some preprocessing: reject any sentences that have lemmas or
+        # tokens that are too long; also replace "." with "_"
+        def utf8len(s):
+            return len(s.encode('utf-8'))
 
-    return out
+        none_flag = False
+        for i in range(1, len(out)):
+            if len(out[i]) == 0:
+                continue
+            if out[i][1] == ".":
+                out[i][1] == "_"
+            if utf8len(out[i][1]) > 200 or utf8len(out[i][2]) > 200:
+                outs.append(None)
+                none_flag = True
+                break
+        if none_flag:
+            continue
+        # out = out + ['\n'] * 1
+        out[-1] = '\n'
+        outs.append(out)
+    return outs
 
-def call_model(sent, model):
-    return call_ginza(sent) if model == "ginza" \
-        else call_esupar(sent)
+def call_model(sent_list, model):
+    def chunks(lst, n):
+        """Yield successive n-sized chunks from lst."""
+        for i in range(0, len(lst), n):
+            yield lst[i:i + n]
+
+    if len(sent_list) < 1000:
+        return call_ginza(sent_list) if model == "ginza" \
+            else call_esupar(sent_list)
+    else:
+        out = []
+        for block in list(chunks(sent_list, 1000)):
+            out.extend(call_ginza(block) if model == "ginza" \
+                else call_esupar(block))
+        out = list(filter(lambda x: x != ['', '\n'], out))
+        out.append(['', '\n'])
+        return out
+
+
 
 def reverse_subst_step(out, new_s, old_s, log, model):
     # replace the first element
@@ -953,58 +1010,79 @@ def reverse_subst_step(out, new_s, old_s, log, model):
     sub_ginza_out(out, old_s, log, model)
 
 
-def modify_conllu(sent, apply_rules=True, return_log=False, constrain_rules=None,
-                  normalize_only=False, model="ginza"):
+def modify_conllu(sent_list, apply_rules=True, return_log=False,
+                  constrain_rules=None,normalize_only=False, model="ginza"):
     vprint(f"rule application ? {apply_rules} module ? {model}")
-    if len(sent) == 0 or sent[0] == '◎':
-        # ignore sentences with title symbol
-        return None
 
-    if apply_rules:
-        global global_array
-        global_array = [0] * len(sent)
+    new_s_list = []
+    old_s_list = []
+    log_list = []
+    for sent in track(sent_list):
+        if len(sent) == 0 or sent[0] == '◎':
+            # ignore sentences with title symbol
+            new_s_list.append(None)
+            old_s_list.append(sent)
+            log_list.append(None)
+            continue
 
-        if model == "esupar":
-            # these rules aren't necessary for esupar
-            for r in ["於て", "働か", "况や",
-                      "定て", "焉ぞ", "况んや", "焉"]:
-                if r in all_rules:
-                    del all_rules[r]
+        if apply_rules:
+            global global_array
+            global_array = [0] * len(sent)
 
-        if constrain_rules is not None:
-            # delete from all_rules
-            to_delete = []
-            for rule in all_rules:
-                if rule not in constrain_rules:
-                    to_delete.append(rule)
+            if model == "esupar":
+                # these rules aren't necessary for esupar
+                for r in ["於て", "働か", "况や",
+                        "定て", "焉ぞ", "况んや", "焉"]:
+                    if r in all_rules:
+                        del all_rules[r]
 
-            for d in to_delete:
-                del all_rules[d]
-        res = ginza_replace(sent, model)
-        if normalize_only:
-            # only the normalization pass requested by user
-            return res
-        new_s, old_s, log = res
-        vprint(f"old s {old_s}")
-        vprint(f"new s {new_s}")
-    else:
-        new_s = sent
-        old_s = log = None
+            if constrain_rules is not None:
+                # delete from all_rules
+                to_delete = []
+                for rule in all_rules:
+                    if rule not in constrain_rules:
+                        to_delete.append(rule)
+
+                for d in to_delete:
+                    del all_rules[d]
+            res = ginza_replace(sent, model)
+            if normalize_only:
+                # only the normalization pass requested by user
+                return res
+            new_s, old_s, log = res
+            vprint(f"old s {old_s}")
+            vprint(f"new s {new_s}")
+            new_s_list.append(new_s)
+            old_s_list.append(old_s)
+            log_list.append(log)
+        else:
+            new_s = sent
+            old_s = log = None
+            new_s_list.append(new_s)
+            old_s_list.append(old_s)
+            log_list.append(log)
 
     # second step: do the reverse substitution to replace the new characters
     # with the old characters; for this we need to know positions of chars
-    out = call_model(new_s, model)
-    if out is None:
-        return None
+    outs = call_model(new_s_list, model)
+    #assert len(outs) - 1 == len(new_s_list) == len(old_s_list) == len(log_list) \
+    #    == len(sent_list)
+    substituted_outs = []
+    for out, new_s, old_s, log in track(
+        zip(outs,new_s_list,old_s_list,log_list),total=len(outs)):
+        if out is None:
+            substituted_outs.append(None)
+            continue
 
-    if apply_rules:
-        reverse_subst_step(out, new_s, old_s, log, model)
+        if apply_rules:
+            reverse_subst_step(out, new_s, old_s, log, model)
 
-    if not return_log:
-        return out
-    else:
-        rules_view = [{rule : all_rules[rule]} for rule in log]
-        return out, log, rules_view
+        if not return_log:
+            substituted_outs.append(out)
+        else:
+            rules_view = [{rule : all_rules[rule]} for rule in log]
+            substituted_outs.append((out, log, rules_view))
+    return substituted_outs
 
 def print_usage():
     u = "python modify_conllu.py "
@@ -1018,16 +1096,25 @@ if __name__ == "__main__":
     app_rules = True
     model = "ginza"
     dir_name = 'tmp'
+    print(sys.argv)
 
     # get filename from CLI if there exists one
     if sys.stdin.isatty() and len(sys.argv) > 1:
         fname = sys.argv[1]
     elif not sys.stdin.isatty() and len(sys.argv) > 1:
         fname = sys.stdin.readlines()
-        sys.argv.insert(1, fname)
+        # if that is still empty then an actual filename
+        # is trying to be piped in
+        if len(fname) == 0:
+            fname = sys.argv[1]
+            assert os.path.exists(fname)
+        # user has piped in a list of sentences
+        else:
+            sys.argv.insert(1, fname)
     else:
         print_usage()
         exit()
+
 
     if len(sys.argv) >= 3:
         app_rules = False if sys.argv[2] == "False" else True
@@ -1044,7 +1131,9 @@ if __name__ == "__main__":
         ftype = "list"
 
     if model == "esupar":
-        esupar_model = esupar.load("ja")
+        os.environ['CUDA_VISIBLE_DEVICES'] = ""
+        esupar_model = esupar.load(
+            "jerrybonnell/adaptabert-japanese-yasuoka-char-cvg-25-upos")
 
     console.print((fname, ftype, app_rules, model, dir_name, verbose))
     if ftype == "txt":
@@ -1063,27 +1152,31 @@ if __name__ == "__main__":
 
     # some preprocessing
     body_lis = [''.join(b.split()) for b in body_lis]
+    body_lis = [b for b in body_lis if len(b) > 0]
+    assert len(body_lis) > 0
 
     outs = []
-    for sent in track(body_lis):
-        out = modify_conllu(sent, apply_rules=app_rules, model=model)
-        if out is None:
-            console.print("invalid sentence :x:", style="bold red")
+    for sent, sent_out in zip(body_lis,
+        modify_conllu(body_lis, apply_rules=app_rules, model=model)):
+        #out = modify_conllu(sent, apply_rules=app_rules, model=model)
+        if sent_out is None:
+            console.print(
+                f"\n{sent}-----invalid sentence :stop_sign:", style="bold red")
             continue
-        if conllu_check.test_sent_not_corrupted(sent, out):
-            console.print("\nno corruptions found in FORM :white_heavy_check_mark: ",
+        if conllu_check.test_sent_not_corrupted(sent, sent_out):
+            console.print(f"\n{sent}-----no corruptions found in FORM :white_heavy_check_mark: ",
                         style="bold green")
         else:
-            console.print("\ncorruptions found in FORM :x: ",
+            console.print(f"\n{sent}-----corruptions found in FORM :x: ",
                         style="bold red")
 
         # time to go back
-        for i in range(len(out)):
-            if type(out[i]) == list:
-                out[i] = "\t".join(out[i])
-        out = "\n".join(out)
-        console.print(out)
-        outs.append(out)
+        for i in range(len(sent_out)):
+            if type(sent_out[i]) == list:
+                sent_out[i] = "\t".join(sent_out[i])
+        sent_out = "\n".join(sent_out)
+        console.print(sent_out)
+        outs.append(sent_out)
 
     # write to file
     if type(fname) is not list:
