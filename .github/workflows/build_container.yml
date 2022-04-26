@@ -7,7 +7,7 @@ jobs:
     steps:
     # see https://github.com/actions/checkout/issues/760
     - name: adding github workspace as safe directory
-      run: git config --global --add safe.directory $GITHUB_WORKSPACE
+      run: git config --global --add safe.directory /github/workspace
 
     - name: Checkout Code
       uses: actions/checkout@v2
