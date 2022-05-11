@@ -17,8 +17,7 @@ import subprocess
 import io
 
 
-
-sys.path.append('../')
+#sys.path.append('../')
 from evaluation_script import conll18_ud_eval
 
 FILE_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -1089,6 +1088,8 @@ def print_usage():
     u += "[INFILE] [APPLY_RULES] [MODEL] [OUT_DIR] [VERBOSE]"
     print(u)
 
+
+
 if __name__ == "__main__":
     import conllu_check
     # take care of loading info
@@ -1115,7 +1116,6 @@ if __name__ == "__main__":
         print_usage()
         exit()
 
-
     if len(sys.argv) >= 3:
         app_rules = False if sys.argv[2] == "False" else True
     if len(sys.argv) >= 4:
@@ -1129,6 +1129,9 @@ if __name__ == "__main__":
         ftype = fname.split(".")[-1]
     else:
         ftype = "list"
+    # strange behavior when loading esupar model
+    if type(sys.argv[1]) is list:
+        del sys.argv[1]
 
     if model == "esupar":
         os.environ['CUDA_VISIBLE_DEVICES'] = ""
